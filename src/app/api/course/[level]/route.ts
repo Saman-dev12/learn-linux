@@ -1,3 +1,4 @@
+import { FilterQuery } from 'mongoose';
 import { NextRequest, NextResponse } from 'next/server';
 import Course from '~/models/Course.model';
 
@@ -5,7 +6,7 @@ export async function GET(request: NextRequest, { params }: { params: { level: s
   try {
     const level = params.level; 
 
-    const course = await Course.findOne({ for: level });
+    const course = await Course.findOne<{ for: string }>({ for: level } as FilterQuery<Course>);
     if (!course) {
       return NextResponse.json({ error: 'Course not found' }, { status: 404 });
     }

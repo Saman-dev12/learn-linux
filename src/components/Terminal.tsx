@@ -55,19 +55,23 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand }) => {
 
       xtermRef.current.open(terminalRef.current);
 
-      xtermRef.current.write('Welcome to the Linux Terminal!\r\n$ ');
+      xtermRef.current.write('Welcome to the Linux Terminal!\r\n> '); // Changed prompt to '>'
 
       xtermRef.current.onKey(({ key, domEvent }) => {
         const xterm = xtermRef.current;
         if (!xterm) return;
 
         if (domEvent.key === 'Enter') {
-          const input = xterm.buffer.active.getLine(xterm.buffer.active.cursorY)?.translateToString(false).trim();
-          if (input) {
-            xterm.write('\r\n');
-            onCommand(input); // Pass the command to the parent component
+          const line = xterm.buffer.active.getLine(xterm.buffer.active.cursorY);
+          if (line) {
+            const input = line.translateToString(false).trim(); // Get the input from the terminal
+            if (input) {
+              xterm.write('\r\n'); // Move to a new line
+              const command = input.replace(/^>\s*/, ''); // Remove prompt characters (if any)
+              onCommand(command); // Pass the command to the parent component
+              xterm.write('\r\n> '); // Display the prompt after processing the command
+            }
           }
-          xterm.write('\r\n$ ');
         } else if (domEvent.key === 'Backspace') {
           // Do not delete the prompt
           if (xterm.buffer.active.cursorX > 2) {
@@ -94,7 +98,7 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand }) => {
     };
   }, [cols, onCommand]);
 
-  return <div ref={terminalRef} className="h-full w-full" />;
+  return <div ref={terminalRef} className="h-[80%] w-full" />;
 };
 
 export default Terminal;

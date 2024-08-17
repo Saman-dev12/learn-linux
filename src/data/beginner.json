@@ -1,0 +1,280 @@
+{
+    "course": {
+      "title": "Linux Learning Course",
+      "chapters": [
+        {
+          "chapterNumber": 1,
+          "title": "Introduction to Linux",
+          "objective": "Understand what Linux is and get familiar with basic commands.",
+          "content": [
+            {
+              "section": "Introduction to Linux",
+              "details": "History of Linux, Key features and benefits"
+            },
+            {
+              "section": "Basic Commands",
+              "commands": [
+                {"command": "ls", "description": "List directory contents", "syntax": "ls [options] [file...]"},
+                {"command": "cd", "description": "Change directory", "syntax": "cd [directory]"},
+                {"command": "pwd", "description": "Print working directory", "syntax": "pwd"},
+                {"command": "mkdir", "description": "Make directories", "syntax": "mkdir [options] directory..."},
+                {"command": "rmdir", "description": "Remove directories", "syntax": "rmdir [options] directory..."},
+                {"command": "touch", "description": "Create empty files", "syntax": "touch [options] file..."},
+                {"command": "cat", "description": "Concatenate and display file contents", "syntax": "cat [options] [file...]"},
+                {"command": "echo", "description": "Display a line of text", "syntax": "echo [options] [string...]"},
+                {"command": "man", "description": "Display the manual of a command", "syntax": "man [section] page"},
+                {"command": "history", "description": "Show command history", "syntax": "history [options]"}
+              ]
+            }
+          ]
+        },
+        {
+          "chapterNumber": 2,
+          "title": "File System Basics",
+          "objective": "Learn about the Linux file system structure and basic file operations.",
+          "content": [
+            {
+              "section": "File System Hierarchy",
+              "details": [
+                {"/": "Root directory"},
+                {"/home": "User directories"},
+                {"/etc": "System configuration files"},
+                {"/var": "Variable data files"},
+                {"/tmp": "Temporary files"},
+                {"/usr": "User programs"}
+              ]
+            },
+            {
+              "section": "File and Directory Management",
+              "commands": [
+                {"command": "cp", "description": "Copy files and directories", "syntax": "cp [options] source destination"},
+                {"command": "mv", "description": "Move or rename files and directories", "syntax": "mv [options] source destination"},
+                {"command": "rm", "description": "Remove files and directories", "syntax": "rm [options] file..."},
+                {"command": "find", "description": "Search for files and directories", "syntax": "find [path] [options] [expression]"},
+                {"command": "locate", "description": "Quickly find files", "syntax": "locate [options] pattern"},
+                {"command": "ln", "description": "Create hard and symbolic links", "syntax": "ln [options] target [link]"},
+                {"command": "du", "description": "Estimate file space usage", "syntax": "du [options] [file...]"}
+              ]
+            }
+          ]
+        },
+        {
+          "chapterNumber": 3,
+          "title": "User and Permission Management",
+          "objective": "Manage user accounts and understand file permissions.",
+          "content": [
+            {
+              "section": "User Management",
+              "commands": [
+                {"command": "useradd", "description": "Add a user", "syntax": "useradd [options] username"},
+                {"command": "usermod", "description": "Modify a user", "syntax": "usermod [options] username"},
+                {"command": "passwd", "description": "Change user password", "syntax": "passwd [username]"},
+                {"command": "deluser", "description": "Delete a user", "syntax": "deluser [options] username"},
+                {"command": "groupadd", "description": "Add a new group", "syntax": "groupadd [options] groupname"},
+                {"command": "groupdel", "description": "Delete a group", "syntax": "groupdel [options] groupname"}
+              ]
+            },
+            {
+              "section": "File Permissions",
+              "commands": [
+                {"command": "chmod", "description": "Change file permissions", "syntax": "chmod [options] mode file..."},
+                {"command": "chown", "description": "Change file owner", "syntax": "chown [options] owner[:group] file..."},
+                {"command": "chgrp", "description": "Change file group", "syntax": "chgrp [options] group file..."},
+                {"command": "umask", "description": "Set default file permissions", "syntax": "umask [mode]"}
+              ]
+            },
+            {
+              "section": "Understanding Permissions",
+              "commands": [
+                {"command": "ls -l", "description": "List files with permissions", "syntax": "ls -l [options] [file...]"},
+                {"command": "stat", "description": "Display file or file system status", "syntax": "stat [options] file"}
+              ]
+            }
+          ]
+        },
+        {
+          "chapterNumber": 4,
+          "title": "Package Management",
+          "objective": "Manage software packages using package managers.",
+          "content": [
+            {
+              "section": "Package Managers",
+              "details": [
+                {"manager": "apt", "description": "Advanced Package Tool (Debian-based)"},
+                {"manager": "yum", "description": "Yellowdog Updater Modified (RHEL-based)"},
+                {"manager": "dnf", "description": "Dandified YUM (Fedora-based)"},
+                {"manager": "zypper", "description": "Package management for openSUSE"}
+              ]
+            },
+            {
+              "section": "Commands",
+              "commands": [
+                {"command": "apt-get install", "description": "Install packages", "syntax": "apt-get install [package...]"},
+                {"command": "apt-get remove", "description": "Remove packages", "syntax": "apt-get remove [package...]"},
+                {"command": "apt-cache search", "description": "Search for packages", "syntax": "apt-cache search [package]"},
+                {"command": "yum install", "description": "Install packages", "syntax": "yum install [package...]"},
+                {"command": "yum remove", "description": "Remove packages", "syntax": "yum remove [package...]"},
+                {"command": "dnf install", "description": "Install packages", "syntax": "dnf install [package...]"},
+                {"command": "dnf remove", "description": "Remove packages", "syntax": "dnf remove [package...]"},
+                {"command": "zypper install", "description": "Install packages", "syntax": "zypper install [package...]"},
+                {"command": "zypper remove", "description": "Remove packages", "syntax": "zypper remove [package...]"}
+              ]
+            }
+          ]
+        },
+        {
+          "chapterNumber": 5,
+          "title": "Networking Basics",
+          "objective": "Understand basic networking commands and configuration.",
+          "content": [
+            {
+              "section": "Network Configuration",
+              "commands": [
+                {"command": "ifconfig", "description": "Configure network interfaces (deprecated, use ip instead)", "syntax": "ifconfig [interface] [options]"},
+                {"command": "ip addr", "description": "Show IP addresses", "syntax": "ip addr [options]"},
+                {"command": "ip link", "description": "Show and manage network interfaces", "syntax": "ip link [options]"},
+                {"command": "nmcli", "description": "NetworkManager command-line tool", "syntax": "nmcli [options] [command]"},
+                {"command": "iwconfig", "description": "Configure wireless network interfaces", "syntax": "iwconfig [interface] [options]"}
+              ]
+            },
+            {
+              "section": "Network Troubleshooting",
+              "commands": [
+                {"command": "ping", "description": "Test connectivity", "syntax": "ping [options] destination"},
+                {"command": "netstat", "description": "Network statistics", "syntax": "netstat [options]"},
+                {"command": "traceroute", "description": "Trace route to a network host", "syntax": "traceroute [options] destination"},
+                {"command": "nslookup", "description": "Query DNS", "syntax": "nslookup [options] [hostname]"},
+                {"command": "curl", "description": "Transfer data from or to a server", "syntax": "curl [options] [URL...]"},
+                {"command": "wget", "description": "Download files from the web", "syntax": "wget [options] [URL...]"}
+              ]
+            }
+          ]
+        },
+        {
+          "chapterNumber": 6,
+          "title": "Processes and System Monitoring",
+          "objective": "Manage processes and monitor system performance.",
+          "content": [
+            {
+              "section": "Process Management",
+              "commands": [
+                {"command": "ps", "description": "Show process status", "syntax": "ps [options]"},
+                {"command": "top", "description": "Display active processes", "syntax": "top [options]"},
+                {"command": "htop", "description": "Interactive process viewer", "syntax": "htop [options]"},
+                {"command": "kill", "description": "Terminate processes", "syntax": "kill [options] PID"},
+                {"command": "killall", "description": "Terminate processes by name", "syntax": "killall [options] name"}
+              ]
+            },
+            {
+              "section": "System Monitoring",
+              "commands": [
+                {"command": "df", "description": "Display disk space usage", "syntax": "df [options] [file...]"},
+                {"command": "du", "description": "Estimate file space usage", "syntax": "du [options] [file...]"},
+                {"command": "free", "description": "Display memory usage", "syntax": "free [options]"},
+                {"command": "vmstat", "description": "Report virtual memory statistics", "syntax": "vmstat [options]"},
+                {"command": "iostat", "description": "Report I/O statistics", "syntax": "iostat [options]"}
+              ]
+            }
+          ]
+        },
+        {
+          "chapterNumber": 7,
+          "title": "Scripting and Automation",
+          "objective": "Write and execute shell scripts to automate tasks.",
+          "content": [
+            {
+              "section": "Shell Scripting Basics",
+              "commands": [
+                {"command": "bash", "description": "GNU Bourne Again SHell", "syntax": "bash [options] [file...]"},
+                {"command": "sh", "description": "Bourne Shell", "syntax": "sh [options] [file...]"},
+                {"command": "chmod +x", "description": "Make a script executable", "syntax": "chmod +x script.sh"},
+                {"command": "crontab -e", "description": "Edit the cron table", "syntax": "crontab -e"}
+              ]
+            },
+            {
+              "section": "Writing Scripts",
+              "commands": [
+                {"command": "echo", "description": "Print text to the terminal", "syntax": "echo [options] [text...]"},
+                {"command": "read", "description": "Read input from the user", "syntax": "read [options] variable"},
+                {"command": "if", "description": "Conditional statement", "syntax": "if [ condition ]; then commands; fi"},
+                {"command": "for", "description": "Loop over a list", "syntax": "for variable in list; do commands; done"},
+                {"command": "while", "description": "Loop while a condition is true", "syntax": "while [ condition ]; do commands; done"}
+              ]
+            }
+          ]
+        },
+        {
+          "chapterNumber": 8,
+          "title": "Text Processing",
+          "objective": "Manipulate and process text files effectively.",
+          "content": [
+            {
+              "section": "Text Processing Commands",
+              "commands": [
+                {"command": "grep", "description": "Search text using patterns", "syntax": "grep [options] pattern [file...]"},
+                {"command": "sed", "description": "Stream editor for filtering and transforming text", "syntax": "sed [options] 'script' [file...]"},
+                {"command": "awk", "description": "Pattern scanning and processing language", "syntax": "awk [options] 'program' [file...]"},
+                {"command": "cut", "description": "Remove sections from each line of files", "syntax": "cut [options] [file...]"},
+                {"command": "sort", "description": "Sort lines of text files", "syntax": "sort [options] [file...]"},
+                {"command": "uniq", "description": "Report or omit repeated lines", "syntax": "uniq [options] [file...]"},
+                {"command": "tr", "description": "Translate or delete characters", "syntax": "tr [options] set1 [set2]"},
+                {"command": "wc", "description": "Print newline, word, and byte counts for each file", "syntax": "wc [options] [file...]"}
+              ]
+            }
+          ]
+        },
+        {
+          "chapterNumber": 9,
+          "title": "System Administration",
+          "objective": "Perform basic system administration tasks.",
+          "content": [
+            {
+              "section": "System Configuration",
+              "commands": [
+                {"command": "systemctl", "description": "Control the systemd system and service manager", "syntax": "systemctl [options] command"},
+                {"command": "service", "description": "Run a System V init script", "syntax": "service [service] [command]"},
+                {"command": "crontab", "description": "Schedule periodic tasks", "syntax": "crontab [options]"},
+                {"command": "journalctl", "description": "Query and display messages from the journal", "syntax": "journalctl [options]"}
+              ]
+            },
+            {
+              "section": "Log Management",
+              "commands": [
+                {"command": "tail", "description": "View the end of a file", "syntax": "tail [options] [file...]"},
+                {"command": "head", "description": "View the beginning of a file", "syntax": "head [options] [file...]"},
+                {"command": "logrotate", "description": "Manage log files", "syntax": "logrotate [options] [config-file]"}
+              ]
+            }
+          ]
+        },
+        {
+          "chapterNumber": 10,
+          "title": "Security and Networking",
+          "objective": "Understand basic security measures and networking tools.",
+          "content": [
+            {
+              "section": "Security Basics",
+              "commands": [
+                {"command": "firewall-cmd", "description": "Manage firewall rules (firewalld)", "syntax": "firewall-cmd [options]"},
+                {"command": "ufw", "description": "Uncomplicated Firewall management", "syntax": "ufw [options] command"},
+                {"command": "selinux", "description": "Security-Enhanced Linux management", "syntax": "semanage [options] command"}
+              ]
+            },
+            {
+              "section": "Networking Security",
+              "commands": [
+                {"command": "ssh", "description": "Secure Shell for remote login", "syntax": "ssh [options] user@host"},
+                {"command": "scp", "description": "Securely copy files between hosts", "syntax": "scp [options] source destination"},
+                {"command": "sftp", "description": "Secure File Transfer Protocol", "syntax": "sftp [options] user@host"}
+              ]
+            }
+          ]
+        }
+      ],
+      "additionalResources": {
+        "glossary": "Definitions of key terms and commands.",
+        "references": "Links to official documentation and further reading."
+      }
+    }
+  }
+  

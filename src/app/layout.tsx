@@ -16,14 +16,14 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      
-      <body>
-      <Providers>
-      <Navbar/>
-        {children}
+      <body className="flex flex-col h-screen">
+        <Providers>
+          <Navbar />
+          <main className="flex-1 overflow-y-auto">
+            {children}
+          </main>
         </Providers>
-        </body>
-      
+      </body>
     </html>
   );
 }

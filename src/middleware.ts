@@ -16,6 +16,11 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/dashboard', req.url));
     }
 
+    if (pathname === '/' && token) {
+        // Redirect authenticated users from /login to /dashboard
+        return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+
     if (pathname === '/dashboard' && !token) {
         // Redirect unauthenticated users from /dashboard to /login
         return NextResponse.redirect(new URL('/login', req.url));

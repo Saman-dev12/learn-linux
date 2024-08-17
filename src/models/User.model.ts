@@ -5,6 +5,7 @@ interface IUser extends Document {
     email: string;
     password?: string;
     confirmPassword?: string;
+    completedChapters: number[];
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -25,6 +26,10 @@ const userSchema = new mongoose.Schema<IUser>({
     confirmPassword: {
         type: String,
         required: false,
+    },
+    completedChapters: {
+        type: [Number],
+        default: [],
     }
 });
 

@@ -42,7 +42,7 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, onOutput }) => {
 
       xtermRef.current.open(terminalRef.current);
 
-      xtermRef.current.write('Welcome to the Linux Terminal!\r\n> ');
+      xtermRef.current.write('Welcome to the Linux Terminal!(You can only run the safe commands here)\r\n> ');
 
       xtermRef.current.onKey(async ({ key, domEvent }: { key: string; domEvent: KeyboardEvent }) => {
         const xterm = xtermRef.current;

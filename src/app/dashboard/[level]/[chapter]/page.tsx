@@ -105,7 +105,7 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
       </div>
       <div className="flex-1 overflow-y-auto">
         <div className="flex-1 h-screen">
-          <Terminal onCommand={handleCommand} onOutput={(output) => console.log(output)} />
+          <Terminal onCommand={handleCommand} onOutput={(output) => console.log('')} />
         </div>
       </div>
     </div>

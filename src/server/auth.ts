@@ -3,11 +3,10 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-// import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import dbConnect from "~/config/dbConnect";
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs";
 import { env } from "~/env";
 import User from "~/models/User.model";
 
@@ -23,15 +22,8 @@ declare module "next-auth" {
       id: string;
       username: string;
       email: string;
-      // ...other properties
-      // role: UserRole;
     } & DefaultSession["user"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -41,21 +33,21 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    jwt: ({ token, user }) => {
+    jwt: async ({ token, user }) => {
       if (user) {
-        token.id = user.id;
-        token.username = (user as { username?: string }).username;
-        token.email = user.email;
+        token.id = user.id as string;
+        token.username = (user as { username?: string }).username || '';
+        token.email = user.email as string;
       }
       return token;
     },
-    session: ({ session, token }) => ({
+    session: async ({ session, token }) => ({
       ...session,
       user: {
         ...session.user,
-        id: token.id,
-        username: token.username,
-        email: token.email,
+        id: token.id as string,
+        username: token.username as string,
+        email: token.email as string,
       },
     }),
   },
@@ -74,42 +66,41 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials: any): Promise<any> {
         await dbConnect();
         try {
-          const user = await User.findOne({ email: credentials.email });
+          const user = await User.findOne({ email: credentials?.email });
           if (!user) {
             throw new Error('No user found with this email');
           }
           const isPasswordCorrect = await bcrypt.compare(
-            credentials.password,
-            user.password ?? ''
+            credentials.password || '',
+            user.password || ''
           );
           if (isPasswordCorrect) {
             return {
-              id: user._id?.toString() ?? '',
-              username: user.username ?? '',
-              email: user.email ?? '',
+              id: user._id?.toString() || '',
+              username: user.username || '',
+              email: user.email || '',
             };
           } else {
             throw new Error('Incorrect password');
           }
-        } catch (err: any) {
-          throw new Error(err);
+        } catch (err) {
+          throw new Error(err instanceof Error ? err.message : 'An error occurred');
         }
       },
     }),
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
   ],
+  session: {
+    strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 1 day
+  },
+  pages: {
+    signIn: '/login',
+  },
+  secret: env.NEXTAUTH_SECRET,
 };
 
 /**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
+ * Wrapper for `getServerSession` to avoid importing `authOptions` in every file.
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */

@@ -3,6 +3,7 @@
 import React from 'react';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
+import { env } from '~/env';
 
 interface Command {
   command: string;
@@ -51,7 +52,7 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
     const updatedCompletedChapters = [...user.completedChapters, chapter];
 
     try {
-      const response = await fetch('/api/users/update', {
+      const response = await fetch(`${env.API_URL}/users/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

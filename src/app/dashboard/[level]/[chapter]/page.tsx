@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import LeftPanel from '~/components/LeftPanel';
 import Terminal from '~/components/Terminal';
 import Loading from '~/components/Loading';
+import { env } from '~/env';
 
 interface Course {
   chapters: {
@@ -34,7 +35,7 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`/api/course/${level}`);
+        const response = await fetch(`${env.API_URL}/course/${level}`);
         if (!response.ok) throw new Error('Failed to fetch course');
         const data = await response.json();
         setCourse(data.course);
@@ -54,7 +55,7 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
     fetchCourse();
 
     if (session?.user?.email) {
-      fetch(`/api/users/user?email=${session.user.email}`)
+      fetch(`${env.API_URL}/users/user?email=${session.user.email}`)
         .then((response) => response.json())
         .then((data) => {
           const completedChapters = data.user.completedChapters || [];
@@ -73,7 +74,7 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
 
   const handleCommand = async (command: string) => {
     try {
-      const response = await fetch('/api/execute-command', {
+      const response = await fetch(`${env.API_URL}/execute-command`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ command }),
@@ -105,7 +106,7 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
       </div>
       <div className="flex-1 overflow-y-auto">
         <div className="flex-1 h-screen">
-          <Terminal onCommand={handleCommand} onOutput={(output) => console.log(output)} />
+          <Terminal onCommand={handleCommand} onOutput={(output) => console.log('')} />
         </div>
       </div>
     </div>

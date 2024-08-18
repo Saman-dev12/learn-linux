@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { useSession } from 'next-auth/react';
 import Loading from '~/components/Loading';
+import { env } from '~/env';
 
 interface Course {
   title: string;
@@ -28,7 +29,7 @@ function Page({ params }: { params: { level: string } }) {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`/api/course/${level}`);
+        const response = await fetch(`${env.API_URL}/course/${level}`);
         if (!response.ok) {
           throw new Error('Failed to fetch course');
         }
@@ -42,7 +43,7 @@ function Page({ params }: { params: { level: string } }) {
     fetchCourse();
 
     if (session?.user?.email) {
-      fetch(`/api/users/user?email=${session.user.email}`)
+      fetch(`${env.API_URL}/users/user?email=${session.user.email}`)
         .then(response => response.json())
         .then(data => {
           const completedChapters = data.user.completedChapters || [];

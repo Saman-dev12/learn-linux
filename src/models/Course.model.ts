@@ -1,20 +1,18 @@
-import mongoose, { Schema, model, Document } from 'mongoose';
+import mongoose, { Document, Model, Schema, FilterQuery } from 'mongoose';
 
-// Define the structure of a command
+// Define the types for your document and model
 interface Command {
   command: string;
   description: string;
   syntax: string;
 }
 
-// Define the structure of a section
 interface Section {
   section: string;
   details?: string[] | { [key: string]: string }[];
   commands?: Command[];
 }
 
-// Define the structure of a chapter
 interface Chapter {
   chapterNumber: number;
   title: string;
@@ -22,8 +20,7 @@ interface Chapter {
   content: Section[];
 }
 
-// Define the structure of the course
-interface Course {
+interface Course extends Document {
   for: string;
   course: {
     title: string;
@@ -35,7 +32,7 @@ interface Course {
   };
 }
 
-// Define the Mongoose schema for a course
+// Define the Mongoose schema and model
 const commandSchema = new Schema<Command>({
   command: { type: String, required: true },
   description: { type: String, required: true },
@@ -66,7 +63,7 @@ const courseSchema = new Schema<Course>({
     }
   }
 });
-// Create the model
-const Course = mongoose.models.Course || mongoose.model('Course', courseSchema);
 
-export default Course;
+const CourseModel: Model<Course> = mongoose.models.Course || mongoose.model<Course>('Course', courseSchema);
+
+export default CourseModel;

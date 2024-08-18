@@ -39,7 +39,7 @@ function Page({ params }: { params: { level: string } }) {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`${env.API_URL}/course/${level}`);
+        const response = await fetch(`/course/${level}`);
         if (!response.ok) {
           throw new Error('Failed to fetch course');
         }
@@ -53,7 +53,7 @@ function Page({ params }: { params: { level: string } }) {
     const fetchUser = async () => {
       if (session?.user?.email) {
         try {
-          const response = await fetch(`${env.API_URL}/users/user?email=${session.user.email}`);
+          const response = await fetch(`/users/user?email=${session.user.email}`);
           if (!response.ok) {
             throw new Error('Failed to fetch user data');
           }

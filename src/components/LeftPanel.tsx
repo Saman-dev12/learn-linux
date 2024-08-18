@@ -52,7 +52,7 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
     const updatedCompletedChapters = [...user.completedChapters, chapter];
 
     try {
-      const response = await fetch(`${env.API_URL}/users/update`, {
+      const response = await fetch(`/users/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

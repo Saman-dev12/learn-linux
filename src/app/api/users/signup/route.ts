@@ -1,6 +1,6 @@
 import dbConnect from "~/config/dbConnect";
 import User from "~/models/User.model";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 
 dbConnect()

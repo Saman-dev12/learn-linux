@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import  dbConnect  from '~/config/dbConnect';
 import User from '~/models/User.model';
 

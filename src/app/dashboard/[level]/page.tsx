@@ -6,16 +6,26 @@ import { useSession } from 'next-auth/react';
 import Loading from '~/components/Loading';
 import { env } from '~/env';
 
+interface Chapter {
+  chapterNumber: number;
+  title: string;
+}
+
 interface Course {
   title: string;
-  chapters: {
-    chapterNumber: number;
-    title: string;
-  }[];
+  chapters: Chapter[];
 }
 
 interface User {
   completedChapters: number[];
+}
+
+interface CourseResponse {
+  course: Course;
+}
+
+interface UserResponse {
+  user: User;
 }
 
 function Page({ params }: { params: { level: string } }) {
@@ -33,27 +43,33 @@ function Page({ params }: { params: { level: string } }) {
         if (!response.ok) {
           throw new Error('Failed to fetch course');
         }
-        const data = await response.json();
+        const data: CourseResponse = await response.json();
         setCourse(data.course);
       } catch (error) {
         setError('Failed to fetch course. Please try again later.');
       }
     };
 
-    fetchCourse();
+    const fetchUser = async () => {
+      if (session?.user?.email) {
+        try {
+          const response = await fetch(`${env.API_URL}/users/user?email=${session.user.email}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch user data');
+          }
+          const data: UserResponse = await response.json();
+          setUser(data.user);
+        } catch (error) {
+          setError('Failed to fetch user data. Please try again later.');
+        }
+      }
+    };
 
-    if (session?.user?.email) {
-      fetch(`${env.API_URL}/users/user?email=${session.user.email}`)
-        .then(response => response.json())
-        .then(data => {
-          const completedChapters = data.user.completedChapters || [];
-          setUser({ ...data.user, completedChapters });
-        })
-        .catch(error => setError('Failed to fetch user data. Please try again later.'));
-    }
+    fetchCourse();
+    fetchUser();
   }, [session, level]);
 
-  if (!course || !user) return <Loading/> ;
+  if (!course || !user) return <Loading />;
   if (error) return <div>Error: {error}</div>;
 
   const handleChapterClick = (chapterNumber: number) => {
@@ -63,8 +79,6 @@ function Page({ params }: { params: { level: string } }) {
   };
 
   const isChapterAccessible = (chapterNumber: number) => {
-    // Chapter 1 is always accessible
-    // Any chapter is accessible if the previous chapter is completed
     return chapterNumber === 1 || user?.completedChapters.includes(chapterNumber - 1) || false;
   };
 

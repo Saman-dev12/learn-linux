@@ -7,7 +7,7 @@ export default function HomePage() {
         <h1 className="text-4xl sm:text-5xl font-bold mb-6 text-center">Welcome to the Linux Terminal!</h1>
         <p className="text-base sm:text-lg mb-8 text-center max-w-2xl">
           Welcome to your command line interface for learning Linux! Here, you can explore a variety of courses, tutorials, and resources designed for every skill level. 
-          Whether you're a newbie or a seasoned pro, there's something here for you!
+          Whether you&apos;re a newbie or a seasoned pro, there&apos;s something here for you!
         </p>
         <Link href="/dashboard" className="px-6 py-3 bg-green-500 text-white rounded-full text-lg hover:bg-green-600 transition duration-200">
           Start Your Journey

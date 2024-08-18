@@ -1,5 +1,6 @@
 "use client"
-import React, { FormEvent, useState } from 'react';
+import React, { useState } from 'react';
+import type { FormEvent } from 'react'; // Updated import to type-only
 import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -13,8 +14,8 @@ const Login = () => {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         setError(null);
 
         try {
@@ -91,7 +92,7 @@ const Login = () => {
                         Sign in with Google
                     </button>
                     <div className="text-center text-gray-400">
-                        Don't have an account?
+                        Don&apos;t have an account?
                         <Link href="/register" className="font-bold text-black cursor-pointer">Sign up for free</Link>
                     </div>
                 </div>

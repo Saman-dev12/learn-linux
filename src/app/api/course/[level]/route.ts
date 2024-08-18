@@ -1,8 +1,8 @@
 import { FilterQuery } from 'mongoose';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 import Course from '~/models/Course.model';
 
-// Ensure that the Course model's type is correctly defined
+// Define types for the Course model, if needed
 interface CommandType {
   command: string;
   description: string;
@@ -34,10 +34,9 @@ interface CourseType {
   };
 }
 
-
 export async function GET(request: NextRequest, { params }: { params: { level: string } }) {
   try {
-    const level = params.level; 
+    const level: string = params.level; // Ensure level is typed as string
 
     // Adjust the type of the query to match the CourseType interface
     const course = await Course.findOne<CourseType>({ for: level } as FilterQuery<CourseType>);

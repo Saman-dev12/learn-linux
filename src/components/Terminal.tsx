@@ -11,7 +11,6 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, onOutput }) => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<XTerm | null>(null);
   const [cols, setCols] = useState(75);
-  const isRendered = useRef(false);
 
   const calculateCols = () => {
     if (terminalRef.current) {
@@ -23,7 +22,6 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, onOutput }) => {
   };
 
   useEffect(() => {
-
     if (terminalRef.current) {
       calculateCols();
 
@@ -42,9 +40,9 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, onOutput }) => {
 
       xtermRef.current.open(terminalRef.current);
 
-      xtermRef.current.write('Welcome to the Linux Terminal!(You can only run the safe commands here)\r\n> ');
+      xtermRef.current.write('Welcome to the Linux Terminal! (You can only run safe commands here)\r\n> ');
 
-      xtermRef.current.onKey(async ({ key, domEvent }: { key: string; domEvent: KeyboardEvent }) => {
+      xtermRef.current.onKey(async ({ key, domEvent }) => {
         const xterm = xtermRef.current;
         if (!xterm) return;
 
@@ -58,9 +56,10 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand, onOutput }) => {
                 onOutput(output);
                 
                 xterm.write(`\r\n${output}\r\n> `); // This line shows the output on the terminal
-              } catch (error:any) {
+              } catch (error) {
                 console.error('Error executing command:', error);
-                xterm.write(`\r\nError: ${error.message}\r\n> `);
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+                xterm.write(`\r\nError: ${errorMessage}\r\n> `);
               }
             }
           }

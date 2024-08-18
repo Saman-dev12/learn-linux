@@ -1,21 +1,26 @@
-"use client"
-import React, { FormEvent, useState } from 'react';
-import axios from 'axios';
-import registerImg from '~/assets/register.jpg'
+"use client";
+import React, { useState } from 'react';
+import type { FormEvent } from 'react'; // Updated import to type-only
+import axios, { AxiosError } from 'axios';
+import registerImg from '~/assets/register.jpg';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { env } from '~/env';
 
+interface ErrorResponse {
+    message: string;
+  }
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState<any>(null);
-  const router = useRouter()
+  const [email, setEmail] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-  const handleSubmit = async (e:FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
@@ -26,16 +31,16 @@ const Register = () => {
 
     try {
       // Send registration request
-      const response = await axios.post(`/api/users/signup`, { email, username, password,confirmPassword });
-        // console.log(response.data);
+      const response = await axios.post(`${env.API_URL}/api/users/signup`, { email, username, password, confirmPassword });
       // Handle successful registration (e.g., redirect to login or show success message)
-      if(response.data){
+      if (response.data) {
         router.push('/login');
       }
-    } catch (err: unknown) { 
+    } catch (err: unknown) {
       // Handle error
-      if (axios.isAxiosError(err) && err.response) {
-        setError(err.response.data?.message || 'Registration failed');
+      if (axios.isAxiosError(err)) {
+        const axiosErr = err as AxiosError<ErrorResponse>;
+        setError(axiosErr.response?.data?.message || 'Registration failed');
       } else {
         setError('Registration failed');
       }
@@ -69,60 +74,62 @@ const Register = () => {
             Join us! Please enter your details to create a new account.
           </span>
           {error && <p className="text-red-500 mb-4">{error}</p>}
-          <div className="py-4">
-            <span className="mb-2 text-md">Email</span>
-            <input
-              type="email"
-              className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
-              name="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="py-4">
-            <span className="mb-2 text-md">Username</span>
-            <input
-              type="text"
-              className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
-              name="username"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-          <div className="py-4">
-            <span className="mb-2 text-md">Password</span>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="py-4">
-            <span className="mb-2 text-md">Confirm Password</span>
-            <input
-              type="password"
-              name="confirmPassword"
-              id="confirmPassword"
-              className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button
-            onClick={handleSubmit}
-            className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300"
-          >
-            Sign Up
-          </button>
+          <form onSubmit={handleSubmit}>
+            <div className="py-4">
+              <span className="mb-2 text-md">Email</span>
+              <input
+                type="email"
+                className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+                name="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="py-4">
+              <span className="mb-2 text-md">Username</span>
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+                name="username"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+            <div className="py-4">
+              <span className="mb-2 text-md">Password</span>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <div className="py-4">
+              <span className="mb-2 text-md">Confirm Password</span>
+              <input
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300"
+            >
+              Sign Up
+            </button>
+          </form>
           <div className="text-center text-gray-400">
             Already have an account?
             <Link href="/login" className="font-bold text-black cursor-pointer" onClick={() => router.push('/login')}>

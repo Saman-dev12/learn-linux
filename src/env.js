@@ -24,7 +24,6 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     MONGO_URI : z.string(),
-    // @ts-ignore
     API_URL : z.string()
   },
 

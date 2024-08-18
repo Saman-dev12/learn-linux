@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import React from 'react';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ function Navbar() {
           {session?.user ? (
             <>
               <span className="mr-4 mb-2 md:mb-0">
-                Welcome, {session.user.username ?? session.user.name ?? 'User'}
+                Welcome, {session.user.username || session.user.name || 'User'}
               </span>
               <button 
                 onClick={() => signOut({callbackUrl:'/'})}  

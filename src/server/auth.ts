@@ -64,9 +64,12 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials: any): Promise<any> {
+        console.log('Authorize function called');
         await dbConnect();
+        console.log('Database connected');
         try {
           const user = await User.findOne({ email: credentials?.email });
+          console.log('User found:', user);
           if (!user) {
             throw new Error('No user found with this email');
           }
@@ -75,6 +78,7 @@ export const authOptions: NextAuthOptions = {
             user.password || ''
           );
           if (isPasswordCorrect) {
+            console.log('Password is correct');
             return {
               id: user._id?.toString() || '',
               username: user.username || '',
@@ -84,9 +88,12 @@ export const authOptions: NextAuthOptions = {
             throw new Error('Incorrect password');
           }
         } catch (err) {
+          console.error('Error during authorization:', err);
           throw new Error(err instanceof Error ? err.message : 'An error occurred');
         }
-      },
+      }
+      
+      
     }),
   ],
   session: {

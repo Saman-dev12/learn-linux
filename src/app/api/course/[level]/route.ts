@@ -40,7 +40,7 @@ export async function GET(request: NextRequest, { params }: { params: { level: s
     const level = params.level; 
 
     // Adjust the type of the query to match the CourseType interface
-    const course = await Course.findOne<CourseType>({ for: level } as FilterQuery<CourseType>).exec();
+    const course = await Course.findOne<CourseType>({ for: level } as FilterQuery<CourseType>);
 
     if (!course) {
       return NextResponse.json({ error: 'Course not found' }, { status: 404 });

@@ -9,9 +9,9 @@ function Navbar() {
 
   return (
     <nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4 md:px-8">
         <Link href="/" className="text-xl font-bold mb-4 md:mb-0">
-          True 
+          LiLearnux
         </Link>
         <div className="flex flex-col md:flex-row items-center">
           {session?.user ? (

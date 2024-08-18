@@ -3,13 +3,15 @@ import { Terminal as XTerm } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 
 interface TerminalProps {
-  onCommand: (command: string) => void;
+  onCommand: (command: string) => Promise<string>;
+  onOutput: (output: string) => void;
 }
 
-const Terminal: React.FC<TerminalProps> = ({ onCommand }) => {
+const Terminal: React.FC<TerminalProps> = ({ onCommand, onOutput }) => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const xtermRef = useRef<XTerm | null>(null);
   const [cols, setCols] = useState(75);
+  const isRendered = useRef(false);
 
   const calculateCols = () => {
     if (terminalRef.current) {
@@ -21,6 +23,7 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand }) => {
   };
 
   useEffect(() => {
+
     if (terminalRef.current) {
       calculateCols();
 
@@ -34,50 +37,38 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand }) => {
           background: '#000000',
           foreground: '#D4D4D4',
           cursor: '#00FF00',
-          black: '#000000',
-          red: '#CD3131',
-          green: '#0DBC79',
-          yellow: '#E5E510',
-          blue: '#2472C8',
-          magenta: '#BC3FBC',
-          cyan: '#11A8CD',
-          white: '#E5E5E5',
-          brightBlack: '#666666',
-          brightRed: '#F14C4C',
-          brightGreen: '#23D18B',
-          brightYellow: '#F5F543',
-          brightBlue: '#3B8EEA',
-          brightMagenta: '#D670D6',
-          brightCyan: '#29B8DB',
-          brightWhite: '#E5E5E5',
         },
       });
 
       xtermRef.current.open(terminalRef.current);
 
-      xtermRef.current.write('Welcome to the Linux Terminal!\r\n> '); // Changed prompt to '>'
+      xtermRef.current.write('Welcome to the Linux Terminal!\r\n> ');
 
-      xtermRef.current.onKey(({ key, domEvent }) => {
+      xtermRef.current.onKey(async ({ key, domEvent }: { key: string; domEvent: KeyboardEvent }) => {
         const xterm = xtermRef.current;
         if (!xterm) return;
 
         if (domEvent.key === 'Enter') {
-          const line = xterm.buffer.active.getLine(xterm.buffer.active.cursorY);
-          if (line) {
-            const input = line.translateToString(false).trim(); // Get the input from the terminal
-            if (input) {
-              xterm.write('\r\n'); // Move to a new line
-              const command = input.replace(/^>\s*/, ''); // Remove prompt characters (if any)
-              onCommand(command); // Pass the command to the parent component
-              xterm.write('\r\n> '); // Display the prompt after processing the command
+          const input = xterm.buffer.active.getLine(xterm.buffer.active.cursorY)?.translateToString(false).trim();
+          if (input) {
+            const command = input.replace(/^>\s*/, '');
+            if (typeof onCommand === 'function') {
+              try {
+                const output = await onCommand(command);
+                onOutput(output);
+                
+                xterm.write(`\r\n${output}\r\n> `); // This line shows the output on the terminal
+              } catch (error:any) {
+                console.error('Error executing command:', error);
+                xterm.write(`\r\nError: ${error.message}\r\n> `);
+              }
             }
           }
         } else if (domEvent.key === 'Backspace') {
-          // Do not delete the prompt
           if (xterm.buffer.active.cursorX > 2) {
             xterm.write('\b \b');
           }
-        } else {
+        } else if (!domEvent.ctrlKey && !domEvent.altKey && !domEvent.metaKey) {
           xterm.write(key);
         }
       });
@@ -96,7 +87,7 @@ const Terminal: React.FC<TerminalProps> = ({ onCommand }) => {
       window.removeEventListener('resize', handleResize);
       xtermRef.current?.dispose();
     };
-  }, [cols, onCommand]);
+  }, [cols, onCommand, onOutput]);
 
   return <div ref={terminalRef} className="h-[80%] w-full" />;
 };

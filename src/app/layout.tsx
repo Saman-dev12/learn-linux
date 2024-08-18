@@ -15,17 +15,15 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
-      
-      <body className="h-screen">
-      <Providers>
-      <Navbar/>
-      <main className="h-[80%]">
-        {children}
-        </main>
+    <html lang="en" className={`${GeistSans.variable} h-full`}>
+      <body className="h-full flex flex-col">
+        <Providers>
+          <Navbar />
+          <main className="flex-grow">
+            {children}
+          </main>
         </Providers>
-        </body>
-      
+      </body>
     </html>
   );
 }

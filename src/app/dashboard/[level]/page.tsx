@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { useSession } from 'next-auth/react';
+import Loading from '~/components/Loading';
 
 interface Course {
   title: string;
@@ -51,7 +52,7 @@ function Page({ params }: { params: { level: string } }) {
     }
   }, [session, level]);
 
-  if (!course || !user) return <div>Loading...</div>;
+  if (!course || !user) return <Loading/> ;
   if (error) return <div>Error: {error}</div>;
 
   const handleChapterClick = (chapterNumber: number) => {

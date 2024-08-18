@@ -1,16 +1,17 @@
-// Page.tsx
 "use client";
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import LeftPanel from '~/components/LeftPanel';
-import RightPanel from '~/components/RightPanel';
+import Terminal from '~/components/Terminal';
+import Loading from '~/components/Loading';
 
 interface Course {
   chapters: {
     chapterNumber: number;
     title: string;
+    objective: string;
     content: any[];
   }[];
 }
@@ -25,8 +26,9 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
   const [user, setUser] = useState<User | null>(null);
   const [selectedChapter, setSelectedChapter] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { data: session } = useSession();
-  const chapter = params.chapter;
+  const chapter = Number(params.chapter);
   const level = searchParams?.level;
 
   useEffect(() => {
@@ -36,15 +38,16 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
         if (!response.ok) throw new Error('Failed to fetch course');
         const data = await response.json();
         setCourse(data.course);
+        const chapterObj = data.course.chapters?.find(
+          (chap: { chapterNumber: number; content: any[] }) => chap.chapterNumber === chapter
+        );
 
-        const chapterObj = data.course.chapters?.find((chap:{chapterNumber : number,content:[]}) =>{
-            return chap.content;
-        });
-        const content = chapterObj || null ;
+        const content = chapterObj || null;
         setSelectedChapter(content);
-
+        setIsLoading(false); // Stop loading when data is fetched
       } catch (error) {
         setError('Failed to fetch course. Please try again later.');
+        setIsLoading(false); // Stop loading if there's an error
       }
     };
 
@@ -52,20 +55,20 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
 
     if (session?.user?.email) {
       fetch(`/api/users/user?email=${session.user.email}`)
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
           const completedChapters = data.user.completedChapters || [];
           setUser({ ...data.user, completedChapters });
         })
-        .catch(() => setError('Failed to fetch user data. Please try again later.'));
+        .catch(() => {
+          setError('Failed to fetch user data. Please try again later.');
+          setIsLoading(false); // Stop loading if there's an error
+        });
     }
-    console.log(course )
-    console.log(selectedChapter)
-    console.log(user)
-    
   }, [session, chapter]);
 
-  if (!course || !selectedChapter || !user) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
+
   if (error) return <div className="text-red-500">{error}</div>;
 
   const handleCommand = async (command: string) => {
@@ -78,7 +81,7 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
 
       const result = await response.json();
       if (response.ok) {
-        console.log(`Command output: ${result.output}`);
+        return result.output;
       } else {
         console.error(`Command error: ${result.error}`);
       }
@@ -87,19 +90,24 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
     }
   };
 
- 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gray-100 flex flex-row h-screen">
-      <LeftPanel
-        selectedChapter={selectedChapter}
-        level={level}
-        chapter={chapter}
-        user={user}
-        session={session}
-        setError={setError}
-        setUser={setUser}
-      />
-      <RightPanel handleCommand={handleCommand} />
+    <div className="p-4 sm:p-6 lg:p-8 bg-gray-100 flex flex-col lg:flex-row h-screen">
+      <div className="flex-1 overflow-y-auto">
+        <LeftPanel
+          selectedChapter={selectedChapter}
+          level={level}
+          chapter={chapter}
+          user={user}
+          session={session}
+          setError={setError}
+          setUser={setUser}
+        />
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 h-screen">
+          <Terminal onCommand={handleCommand} onOutput={(output) => console.log(output)} />
+        </div>
+      </div>
     </div>
   );
 }

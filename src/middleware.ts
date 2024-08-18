@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import { env } from './env';
 
-const secret = process.env.NEXTAUTH_SECRET; // Add your secret here
+const secret = env.NEXTAUTH_SECRET; // Add your secret here
 
 export async function middleware(req: NextRequest) {
     // Define your URL patterns

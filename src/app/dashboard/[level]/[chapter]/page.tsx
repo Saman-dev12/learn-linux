@@ -44,7 +44,7 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`/course/${level}`);
+        const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/course/${level}`);
         if (!response.ok) throw new Error('Failed to fetch course');
         const data: CourseResponse = await response.json();
         setCourse(data.course);
@@ -64,7 +64,7 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
     const fetchUser = async () => {
       if (session?.user?.email) {
         try {
-          const response = await fetch(`/users/user?email=${session.user.email}`);
+          const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/users/user?email=${session.user.email}`);
           if (!response.ok) throw new Error('Failed to fetch user data');
           const data: UserResponse = await response.json();
           setUser({ ...data.user, completedChapters: data.user.completedChapters || [] });
@@ -86,7 +86,7 @@ function Page({ params, searchParams }: { params: { chapter: number }, searchPar
 
   const handleCommand = async (command: string) => {
     try {
-      const response = await fetch(`/execute-command`, {
+      const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/execute-command`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ command }),

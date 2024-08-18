@@ -31,7 +31,7 @@ const Register = () => {
 
     try {
       // Send registration request
-      const response = await axios.post(`/api/users/signup`, { email, username, password, confirmPassword });
+      const response = await axios.post(`${env.NEXT_PUBLIC_API_URL}/api/users/signup`, { email, username, password, confirmPassword });
       // Handle successful registration (e.g., redirect to login or show success message)
       if (response.data) {
         router.push('/login');
